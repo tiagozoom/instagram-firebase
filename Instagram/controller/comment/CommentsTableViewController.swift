@@ -84,8 +84,9 @@ class CommentsTableViewController: UITableViewController {
     
     override var inputAccessoryView: UIView?{
         get{
-            let container = UIView()
+            let container = ComposeView()
             container.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
+            
             let commentaryInputText = UITextField()
 
             container.backgroundColor = .red

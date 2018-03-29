@@ -49,32 +49,24 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     
     fileprivate func observePostsAddition(){
         guard let userUID = user?.uid else{ return}
-        Database.database().reference().child("posts").child(userUID).queryOrdered(byChild: "creationDate").observe(.childAdded) { [weak self] (snapShot) in
-            if let post = Post(snapshot: snapShot){
-                self?.loadImage(post: post)
-            }
-        }
+        PostRepository.fetchPostsOrdered(byChild: "creationDate", with: userUID , completion: self.loadImage)
     }
     
     fileprivate func observePostsDeletion(){
         guard let userUID = user?.uid else{ return}
-        Database.database().reference().child("posts").child(userUID).observe(.childRemoved) { [weak self] (snapShot) in
-            if let post = Post(snapshot: snapShot){
-                if let index = self?.posts.index(where: {$0.uid == post.uid}) {
-                    self?.removeImage(from: index)
-                }
-            }
-        }
+        PostRepository.observePostDeletion(with: userUID, posts: self.posts, completion: self.removeImage)
     }
     
     fileprivate func fetchUser() throws{
         guard let userUID = self.userUID ?? Auth.auth().currentUser?.uid else{throw FetchUserError.notLoggedIn}
-        Database.fetchUser(with: userUID,completion: { (user) in
-            DispatchQueue.main.async { [weak self] in
-                self?.user = user
-                self?.collectionView?.reloadSections(IndexSet(integer: 0))
-            }
-        })
+        UserRepository.fetchUser(with: userUID, completion: self.loadUser)
+    }
+    
+    fileprivate func loadUser(user: User){
+        DispatchQueue.main.async { [weak self] in
+            self?.user = user
+            self?.collectionView?.reloadSections(IndexSet(integer: 0))
+        }
     }
     
     fileprivate func loadImage(post:Post){
