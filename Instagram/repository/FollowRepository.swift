@@ -10,15 +10,21 @@ import Foundation
 import Firebase
 
 class FollowRepository: RepositoryDelegate{
-    static func ref() -> DatabaseReference {
+    static func databaseRef() -> DatabaseReference {
         return Database.database().reference().child("following")
     }
     
-    static func fetchFollows(with userId: String, completion: ((DataSnapshot) ->Void)?){
-        self.ref().child(userId).observe(.value, with: { (snapshot) in
-            if let completion = completion{
-                completion(snapshot)
-            }
+    static func storageRef() -> StorageReference {
+        return Storage.storage().reference().child("following")
+    }
+
+    static func fetchFollows(with userId: String, completion: ((String) ->Void)?){
+        self.databaseRef().child(userId).observe(.value, with: { (snapshot) in
+            snapshot.children.forEach({ (value) in
+                if let usersnapshot = value as? DataSnapshot, let completion = completion{
+                    completion(usersnapshot.key)
+                }
+            })
         })
     }
 }

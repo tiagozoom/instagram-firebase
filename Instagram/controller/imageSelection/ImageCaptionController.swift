@@ -116,31 +116,24 @@ class ImageCaptionController: UIViewController {
         
         let filename = NSUUID().uuidString
         
-        Storage.storage().reference().child("posts").child(filename).putData(uploadData, metadata: nil) { [weak self] (metadata, error) in
-            if let error = error{
-                print(error)
-                self?.stopLoadingAnimation()
-                return
+        PostRepository.uploadPostImage(filename: filename, uploadData: uploadData, success: { (imageURL) in
+            if let imageURL = imageURL{
+                PostRepository.save(
+                    imageURL: imageURL,
+                    imageCaption: imageCaption,
+                    userUID: userUID,
+                    creationDate:Date(),
+                    imageHeight: image.size.height,
+                    imageWidth: image.size.width,
+                    success: completion,
+                    error: self.errorSavingImage
+                )
             }
-            if let imageURL = metadata?.downloadURL()?.absoluteString {
-                self?.postsInfoDictionary = ["URL":imageURL,"caption": imageCaption,"creationDate":Date().timeIntervalSince1970,"imageHeight":image.size.height,"imageWidth":image.size.width]
-                self?.saveToDatabase(imageURL: imageURL, imageCaption: imageCaption, userUID: userUID, completion: completion)
-            }
-        }
+        }, error: self.errorSavingImage)
     }
     
-    fileprivate func saveToDatabase(imageURL: String, imageCaption: String, userUID: String, completion: (() -> Void)?){
-        Database.database().reference().child("posts").child(userUID).childByAutoId().updateChildValues(postsInfoDictionary) { [weak self] (error, dataReference) in
-            if let error = error{
-                print(error)
-                self?.stopLoadingAnimation()
-                return
-            }
-            
-            if let completion = completion{
-                completion()
-            }
-        }
+    fileprivate func errorSavingImage(error: Error){
+        self.stopLoadingAnimation()
     }
     
     func dismissScreen(){

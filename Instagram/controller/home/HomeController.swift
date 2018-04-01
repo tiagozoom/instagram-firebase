@@ -26,31 +26,11 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     fileprivate func fetchPosts(completion: ((_ posts: [Post]) -> Void)?){
         guard let userID = Auth.auth().currentUser?.uid else {return}
-        Database.database().reference().child("following").child(userID).observe(.value, with: { (snapshot) in
-            var posts = [Post]()
-            snapshot.children.forEach({ (value) in
-                if let usersnapshot = value as? DataSnapshot {
-                    let uid = usersnapshot.key
-                    Database.fetchUser(with: uid) { (user) in
-                        if let user = user{
-                            Database.database().reference().child("posts").child(uid).queryOrdered(byChild: "creationDate").observe(.value, with: { (snapshot) in
-                                snapshot.children.forEach({ (value) in
-                                    if let postsSnapshot = value as? DataSnapshot{
-                                        if let post = Post(snapshot: postsSnapshot){
-                                            post.user = user
-                                            posts.append(post)
-                                        }
-                                    }
-                                })
-                                if let completion = completion{
-                                    completion(posts)
-                                }
-                            })
-                        }
-                    }
-                }
+        FollowRepository.fetchFollows(with: userID) { (uid) in
+            UserRepository.fetchUser(with: uid, completion: { (user) in
+                PostRepository.fetchPostsByValue(with: user, completion: completion)
             })
-        })
+        }
     }
     
     override func viewDidLoad() {
@@ -64,7 +44,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     fileprivate func loadPosts(posts: [Post]){
         DispatchQueue.main.async { [weak self] in
-            self?.posts = posts
+            self?.posts.append(contentsOf: posts)
             self?.posts.sort(by: { (post1, post2) -> Bool in
                 return post1.creationDate.compare(post2.creationDate) == .orderedDescending
             })

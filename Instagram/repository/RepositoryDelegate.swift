@@ -10,5 +10,6 @@ import Foundation
 import Firebase
 
 protocol RepositoryDelegate{
-    static func ref() -> DatabaseReference
+    static func databaseRef() -> DatabaseReference
+    static func storageRef() -> StorageReference
 }

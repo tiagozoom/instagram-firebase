@@ -180,7 +180,7 @@ class PostCell: UICollectionViewCell{
             self.postImage.pin_updateWithProgress = true
             self.postImage.pin_setImage(from: post.url)
             
-            postDate.text = post.creationDate.timeAgoDisplay()
+            postDate.text = post.creationDate.timeAgoSinceDate()
             setupAttributedPostCaption(post: post)
         }
     }

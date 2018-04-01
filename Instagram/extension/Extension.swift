@@ -24,7 +24,7 @@ extension UIView{
         }
         
         if let right = right{
-         self.rightAnchor.constraint(equalTo: right, constant: paddingRight).isActive = true
+            self.rightAnchor.constraint(equalTo: right, constant: paddingRight).isActive = true
         }
         
         if let bottom = bottom{
@@ -92,17 +92,6 @@ extension UIButton{
     }
 }
 
-extension Database{
-    static func fetchUser(with UID: String, completion: ((User?) -> Void)?){
-        Database.database().reference().child("users").child(UID).observeSingleEvent(of: .value, with: { (snapshot) in
-            let user = User(snapshot: snapshot)
-            if let completion = completion{
-                completion(user)
-            }
-        })
-    }
-}
-
 extension UIImageView{
     func loadImageWith(url imageUrl: URL, completion: ((_ data:Data)->Void)?){
         URLSession.shared.dataTask(with: imageUrl) { (data, response, error) in
@@ -120,27 +109,50 @@ extension UIImageView{
 }
 
 extension Date{
-    func timeAgoDisplay() -> String{
-        let secondsAgo = Int(Date().timeIntervalSince(self))
-
-        if(secondsAgo < TimeInterval.minutes.rawValue){
-            return "\(secondsAgo) seconds ago"
-        }else if(secondsAgo < TimeInterval.hours.rawValue){
-            return "\(secondsAgo / TimeInterval.minutes.rawValue) minutes ago"
-        }else if(secondsAgo < TimeInterval.days.rawValue){
-            return "\(secondsAgo / TimeInterval.hours.rawValue) hours ago"
-        }else if(secondsAgo < TimeInterval.weeks.rawValue){
-            return "\(secondsAgo / TimeInterval.days.rawValue) days ago"
+    func timeAgoSinceDate() -> String {
+        let calendar = NSCalendar.current
+        let unitFlags: Set<Calendar.Component> = [.minute, .hour, .day, .weekOfYear, .month, .year, .second]
+        let now = NSDate()
+        let earliest = now.earlierDate(self as Date)
+        let latest = (earliest == now as Date) ? self : now as Date
+        let components = calendar.dateComponents(unitFlags, from: earliest as Date,  to: latest as Date)
+        
+        if (components.year! >= 2) {
+            return "\(components.year!) years ago"
+        } else if (components.year! >= 1){
+            return "1 year ago"
+        } else if (components.month! >= 2) {
+            return "\(components.month!) months ago"
+        } else if (components.month! >= 1){
+            return "1 month ago"
+        } else if (components.weekOfYear! >= 2) {
+            return "\(components.weekOfYear!) weeks ago"
+        } else if (components.weekOfYear! >= 1){
+            return "1 week ago"
+        } else if (components.day! >= 2) {
+            return "\(components.day!) days ago"
+        } else if (components.day! >= 1){
+            return "1 day ago"
+        } else if (components.hour! >= 2) {
+            return "\(components.hour!) hours ago"
+        } else if (components.hour! >= 1){
+            return "1 hour ago"
+        } else if (components.minute! >= 2) {
+            return "\(components.minute!) minutes ago"
+        } else if (components.minute! >= 1){
+            return "1 minute ago"
+        } else if (components.second! >= 3) {
+            return "\(components.second!) seconds ago"
+        } else {
+            return "Just now"
         }
         
-        return "\(secondsAgo / TimeInterval.weeks.rawValue) hours ago"
     }
-    
-    enum TimeInterval: Int{
-        case minutes = 0x3C
-        case hours = 0xE10
-        case days = 0x86400
-        case weeks = 0x93A80
-        case monts = 0x6EBE00
+}
+
+extension Encodable {
+    var dictionary: [String: Any]? {
+        guard let data = try? JSONEncoder().encode(self) else { return nil }
+        return (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)).flatMap { $0 as? [String: Any] }
     }
 }

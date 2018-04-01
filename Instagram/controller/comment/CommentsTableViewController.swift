@@ -28,20 +28,14 @@ class CommentsTableViewController: UITableViewController {
     
     fileprivate func fetchComments(post: Post, completion: ((_ comment:Comment) -> Void)?){
         if let postID = post.uid{
-            Database.database().reference().child("comments").child(postID).observe(.value) { (snapshot) in
-                snapshot.children.forEach({ (value) in
-                    if let commentSnapshot = value as? DataSnapshot{
-                        if let comment = Comment(snapshot: commentSnapshot  ), let userID = comment.userID{
-                            Database.fetchUser(with: userID, completion: { (user) in
-                                comment.user = user
-                                if let completion = completion{
-                                    completion(comment)
-                                }
-                            })
-                        }
+            CommentRepository.fetchComments(with: postID, completion: { (comment) in
+                UserRepository.fetchUser(with: comment.userID!, completion: { (user) in
+                    comment.user = user
+                    if let completion = completion{
+                       completion(comment)
                     }
                 })
-            }
+            })
         }
     }
     
@@ -84,7 +78,7 @@ class CommentsTableViewController: UITableViewController {
     
     override var inputAccessoryView: UIView?{
         get{
-            let container = ComposeView()
+            let container = UIView()
             container.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
             
             let commentaryInputText = UITextField()

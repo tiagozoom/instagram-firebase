@@ -10,13 +10,16 @@ import Foundation
 import Firebase
 
 class UserRepository: RepositoryDelegate{
-    
-    static func ref() -> DatabaseReference {
+    static func databaseRef() -> DatabaseReference {
         return Database.database().reference().child("users")
     }
     
+    static func storageRef() -> StorageReference {
+        return Storage.storage().reference().child("users")
+    }
+
     static func fetchUser(with userId: String, completion: ((User) -> Void)?){
-        self.ref().child(userId).observeSingleEvent(of: .value, with: { (snapshot) in
+        self.databaseRef().child(userId).observeSingleEvent(of: .value, with: { (snapshot) in
             if let user = User(snapshot: snapshot){
                 if let completion = completion{
                     completion(user)
