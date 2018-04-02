@@ -118,16 +118,8 @@ class ImageCaptionController: UIViewController {
         
         PostRepository.uploadPostImage(filename: filename, uploadData: uploadData, success: { (imageURL) in
             if let imageURL = imageURL{
-                PostRepository.save(
-                    imageURL: imageURL,
-                    imageCaption: imageCaption,
-                    userUID: userUID,
-                    creationDate:Date(),
-                    imageHeight: image.size.height,
-                    imageWidth: image.size.width,
-                    success: completion,
-                    error: self.errorSavingImage
-                )
+                let post = Post(caption: imageCaption, url: imageURL, creationDate: Date().timeIntervalSince1970, imageHeight: image.size.height, imageWidth: image.size.width)
+                PostRepository.save(post:post, userId: userUID,success: completion,error: self.errorSavingImage)
             }
         }, error: self.errorSavingImage)
     }

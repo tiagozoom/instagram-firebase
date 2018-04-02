@@ -14,6 +14,8 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
 
     var posts = [Post]()
     
+    var refresh: UIRefreshControl!
+    
     let titleView: UIImageView = {
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -33,8 +35,17 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         }
     }
     
+    @objc fileprivate func refreshPosts(){
+       self.fetchPosts(completion: loadPosts)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.refresh = UIRefreshControl()
+        self.refresh.addTarget(self, action: #selector(self.refreshPosts), for: .valueChanged)
+        self.refresh.tintColor = .blue
+        
+        self.collectionView?.refreshControl = self.refresh
         self.collectionView?.backgroundColor = .white
         self.collectionView?.numberOfItems(inSection: 0)
         collectionView?.register(PostCell.self, forCellWithReuseIdentifier: PostCell.ID)
@@ -46,9 +57,10 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         DispatchQueue.main.async { [weak self] in
             self?.posts.append(contentsOf: posts)
             self?.posts.sort(by: { (post1, post2) -> Bool in
-                return post1.creationDate.compare(post2.creationDate) == .orderedDescending
+                return post1.createdAt.compare(post2.createdAt) == .orderedDescending
             })
             self?.collectionView?.reloadData()
+            self?.refresh.endRefreshing()
         }
     }
     

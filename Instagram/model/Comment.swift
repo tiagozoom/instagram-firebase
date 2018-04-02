@@ -9,7 +9,7 @@
 import Foundation
 import Firebase
 
-class Comment: NSObject{
+class Comment: Encodable{
     var comment: String?
     var userID: String?
     var user: User?

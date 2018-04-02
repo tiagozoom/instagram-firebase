@@ -9,10 +9,15 @@
 import Foundation
 import Firebase
 
-class Post: NSObject{
+class Post: NSObject,Encodable{
     var caption: String?
     var url: URL?
-    var creationDate: Date
+    var creationDate: TimeInterval
+    var createdAt: Date{
+        get{
+            return Date(timeIntervalSince1970: creationDate)
+        }
+    }
     var uid: String?
     var imageHeight: CGFloat
     var imageWidth: CGFloat
@@ -30,7 +35,7 @@ class Post: NSObject{
         
         self.caption = caption
         self.url = URL(string: url)
-        self.creationDate = Date(timeIntervalSince1970: creationDate)
+        self.creationDate = creationDate
         self.imageHeight = imageHeight
         self.imageWidth = imageWidth
     }
@@ -38,7 +43,7 @@ class Post: NSObject{
     init(caption: String, url: String, creationDate: Double, imageHeight: CGFloat, imageWidth: CGFloat) {
         self.caption = caption
         self.url = URL(string: url)
-        self.creationDate = Date(timeIntervalSince1970: creationDate)
+        self.creationDate = creationDate
         self.imageHeight = imageHeight
         self.imageWidth = imageWidth
     }

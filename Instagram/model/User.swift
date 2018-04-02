@@ -9,7 +9,7 @@
 import Foundation
 import Firebase
 
-class User: NSObject{
+class User: Encodable{
     var name: String?
     var profilePictureURL: URL?
     var uid: String?
