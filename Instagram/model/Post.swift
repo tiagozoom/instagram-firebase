@@ -28,7 +28,7 @@ class Post: NSObject,Encodable{
         self.uid = snapshot.key
         guard let snapshot = snapshot.value as? [String: Any] else{return nil}
         guard let caption = snapshot["caption"] as? String else{return nil}
-        guard let url = snapshot["URL"] as? String else{return nil}
+        guard let url = snapshot["url"] as? String else{return nil}
         guard let creationDate = snapshot["creationDate"] as? Double else{return nil}
         guard let imageHeight = snapshot["imageHeight"] as? CGFloat else{return nil}
         guard let imageWidth = snapshot["imageWidth"] as? CGFloat else{return nil}

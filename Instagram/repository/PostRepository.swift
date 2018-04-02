@@ -78,7 +78,6 @@ class PostRepository: RepositoryDelegate{
         }
     }
     
-
     static func uploadPostImage(filename: String, uploadData: Data, success: @escaping ((String?) -> Void), error: @escaping ((Error) -> Void)){
         self.storageRef().child(filename).putData(uploadData, metadata: nil) { (metadata, err) in
             if let err = err{
@@ -90,17 +89,8 @@ class PostRepository: RepositoryDelegate{
         }
     }
     
-    static func save(imageURL: String, imageCaption: String, userUID: String,creationDate: Date,imageHeight: CGFloat,imageWidth: CGFloat, success: (() -> Void)?, error: @escaping ((Error) -> Void)){
-        
-        let postInfo = PostInfo(
-            URL: imageURL,
-            caption: imageCaption,
-            creationDate: creationDate,
-            imageHeight: imageHeight,
-            imageWidth: imageWidth
-        )
-        
-        self.databaseRef().child(userUID).childByAutoId().updateChildValues(postInfo.dictionary!) { (err, dataReference) in
+    static func save(post: Post,userId: String, success: (() -> Void)?, error: @escaping ((Error) -> Void)){
+        self.databaseRef().child(userId).childByAutoId().updateChildValues(post.dictionary!) { (err, dataReference) in
             if let err = err{
                 error(err)
                 return

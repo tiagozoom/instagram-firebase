@@ -300,6 +300,7 @@
 		48920B231FA299D40097986C /* Instagram */ = {
 			isa = PBXGroup;
 			children = (
+				48CBAD7C206EF319006319BE /* repository */,
 				4821C9C01FB3D2AE00AF5D2F /* Assets.xcassets */,
 				486298381FB7B015005EFF69 /* protocol */,
 				8C3699AD1FB22462005CAA2D /* controller */,
@@ -412,7 +413,6 @@
 		8C3699AD1FB22462005CAA2D /* controller */ = {
 			isa = PBXGroup;
 			children = (
-				48CBAD7C206EF319006319BE /* repository */,
 				48472C8320631B17009B9801 /* comment */,
 				8CCB5143204DAED3001CD5D1 /* search */,
 				48F9B4B11FE9C44A00E2CD8D /* home */,
@@ -996,7 +996,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = Q574737C9B;
+				DEVELOPMENT_TEAM = WZA5VVFPHP;
 				INFOPLIST_FILE = Instagram/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1013,7 +1013,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = Q574737C9B;
+				DEVELOPMENT_TEAM = WZA5VVFPHP;
 				INFOPLIST_FILE = Instagram/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

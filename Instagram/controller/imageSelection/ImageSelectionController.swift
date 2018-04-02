@@ -139,6 +139,7 @@ class ImageSelectionController: UIViewController,ImageSelectorControllerProtocol
     @objc func nextHandler(){
         let imageCaptionController = ImageCaptionController()
         imageCaptionController.selectedImage = self.selectedImage
+        imageCaptionController.separateNavigationControler = self.separateNavigationControler
         navigationController?.pushViewController(imageCaptionController, animated: true)
     }
     

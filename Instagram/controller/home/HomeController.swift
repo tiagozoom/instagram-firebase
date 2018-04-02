@@ -29,6 +29,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     fileprivate func fetchPosts(completion: ((_ posts: [Post]) -> Void)?){
         guard let userID = Auth.auth().currentUser?.uid else {return}
         FollowRepository.fetchFollows(with: userID) { (uid) in
+            self.posts.removeAll()
             UserRepository.fetchUser(with: uid, completion: { (user) in
                 PostRepository.fetchPostsByValue(with: user, completion: completion)
             })
@@ -36,6 +37,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     @objc fileprivate func refreshPosts(){
+       self.posts.removeAll()
        self.fetchPosts(completion: loadPosts)
     }
 
@@ -43,8 +45,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         super.viewDidLoad()
         self.refresh = UIRefreshControl()
         self.refresh.addTarget(self, action: #selector(self.refreshPosts), for: .valueChanged)
-        self.refresh.tintColor = .blue
-        
+
         self.collectionView?.refreshControl = self.refresh
         self.collectionView?.backgroundColor = .white
         self.collectionView?.numberOfItems(inSection: 0)

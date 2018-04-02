@@ -17,6 +17,8 @@ class ImageCaptionController: UIViewController {
         case captionNotFound
     }
     
+    var separateNavigationControler: UISeparateNavigationController?
+    
     var postsInfoDictionary = [String:Any]()
     var user: User?
     var selectedImage = UIImage(){
@@ -129,6 +131,6 @@ class ImageCaptionController: UIViewController {
     }
     
     func dismissScreen(){
-        UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
+        self.separateNavigationControler?.dismiss(animated: true, completion: nil)
     }
 }
