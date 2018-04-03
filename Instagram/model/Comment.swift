@@ -7,22 +7,19 @@
 //
 
 import Foundation
-import Firebase
 
-class Comment: Encodable{
+struct Comment: Encodable{
     var comment: String?
     var userID: String?
     var user: User?
     var uid: String?
     var creationDate: Date?
     
-    init?(snapshot: DataSnapshot) {
-        guard !snapshot.key.isEmpty else{return nil}
-        let uid = snapshot.key
-        guard let snapshot = snapshot.value as? [String: Any] else{return nil}
-        guard let userID = snapshot["userID"] as? String else{return nil}
-        guard let comment = snapshot["comment"] as? String else{return nil}
-        guard let creationDate = snapshot["creationDate"] as? Double else{return nil}
+    init?(dictionary: Dictionary<String,Any>) {
+        guard let uid = dictionary["key"] as? String else{return nil}
+        guard let userID = dictionary["userID"] as? String else{return nil}
+        guard let comment = dictionary["comment"] as? String else{return nil}
+        guard let creationDate = dictionary["creationDate"] as? Double else{return nil}
         
         self.userID = userID
         self.comment = comment

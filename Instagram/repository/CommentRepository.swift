@@ -20,8 +20,10 @@ class CommentRepository: RepositoryDelegate{
 
     static func fetchComments(with postId: String, completion: ((Comment) -> Void)?){
         self.databaseRef().child(postId).observe(.childAdded) { (snapshot) in
-            if let comment = Comment(snapshot: snapshot  ), let completion = completion{
-               completion(comment)
+            if let commentDictionary = snapshot.toDictionary(){
+                if let comment = Comment(dictionary: commentDictionary), let completion = completion{
+                    completion(comment)
+                }
             }
         }
     }

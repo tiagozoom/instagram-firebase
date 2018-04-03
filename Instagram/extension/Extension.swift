@@ -156,3 +156,14 @@ extension Encodable {
         return (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)).flatMap { $0 as? [String: Any] }
     }
 }
+
+extension DataSnapshot{
+    func toDictionary() -> Dictionary<String,Any>?{
+        if var dictionary = self.value as? Dictionary<String,Any>{
+            dictionary["key"] = self.key
+            return dictionary
+        }
+        
+        return nil
+    }
+}

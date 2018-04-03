@@ -29,9 +29,11 @@ class PostRepository: RepositoryDelegate{
     
     static func fetchPostsOrdered(byChild child: String, with userId: String, completion: ((Post) -> Void)?){
         self.databaseRef().child(userId).queryOrdered(byChild: child).observe(.childAdded) { (snapshot) in
-            if let post = Post(snapshot: snapshot){
-                if let completion = completion{
-                    completion(post)
+            if let postDictionary = snapshot.toDictionary(){
+                if let post = Post(dictionary: postDictionary){
+                    if let completion = completion{
+                        completion(post)
+                    }
                 }
             }
         }
@@ -40,10 +42,9 @@ class PostRepository: RepositoryDelegate{
     static func fetchPostsByValue(with user: User, completion: (([Post]) -> Void)?){
         self.databaseRef().child(user.uid!).observeSingleEvent(of: .value, with: { (snapshot) in
             var posts = [Post]()
-            
             snapshot.children.forEach({ (value) in
-                if let postsSnapshot = value as? DataSnapshot{
-                    if let post = Post(snapshot: postsSnapshot){
+                if let postsnapshot = value as? DataSnapshot, let postDictionary = postsnapshot.toDictionary(){
+                    if var post = Post(dictionary: postDictionary ){
                         post.user = user
                         posts.append(post)
                     }
@@ -57,21 +58,25 @@ class PostRepository: RepositoryDelegate{
     }
     
     static func fetchPosts(with userId: String, completion: ((Post) -> Void)?){
-        self.databaseRef().child(userId).observe(.childAdded) { (snapShot) in
-            if let post = Post(snapshot: snapShot){
-                if let completion = completion{
-                    completion(post)
+        self.databaseRef().child(userId).observe(.childAdded) { (snapshot) in
+            if let postDictionary = snapshot.toDictionary(){
+                if let post = Post(dictionary: postDictionary){
+                    if let completion = completion{
+                        completion(post)
+                    }
                 }
             }
         }
     }
     
     static func observePostDeletion(with userId: String, posts: [Post], completion: ((Int) -> Void)?){
-        self.databaseRef().child(userId).observe(.childRemoved) { (snapShot) in
-            if let post = Post(snapshot: snapShot) {
-                if let index = posts.index(where: {$0.uid == post.uid}) {
-                    if let completion = completion{
-                        completion(index)
+        self.databaseRef().child(userId).observe(.childRemoved) { (snapshot) in
+            if let postDictionary = snapshot.toDictionary(){
+                if let post = Post(dictionary: postDictionary){
+                    if let index = posts.index(where: {$0.uid == post.uid}) {
+                        if let completion = completion{
+                            completion(index)
+                        }
                     }
                 }
             }

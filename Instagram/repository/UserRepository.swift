@@ -20,9 +20,11 @@ class UserRepository: RepositoryDelegate{
 
     static func fetchUser(with userId: String, completion: ((User) -> Void)?){
         self.databaseRef().child(userId).observeSingleEvent(of: .value, with: { (snapshot) in
-            if let user = User(snapshot: snapshot){
-                if let completion = completion{
-                    completion(user)
+            if let userDictionary = snapshot.toDictionary(){
+                if let user = User(dictionary: userDictionary){
+                    if let completion = completion{
+                        completion(user)
+                    }
                 }
             }
         })

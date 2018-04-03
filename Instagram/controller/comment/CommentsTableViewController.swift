@@ -30,9 +30,10 @@ class CommentsTableViewController: UITableViewController {
         if let postID = post.uid{
             CommentRepository.fetchComments(with: postID, completion: { (comment) in
                 UserRepository.fetchUser(with: comment.userID!, completion: { (user) in
-                    comment.user = user
+                    var fetchedComment = comment
+                    fetchedComment.user = user
                     if let completion = completion{
-                       completion(comment)
+                       completion(fetchedComment)
                     }
                 })
             })

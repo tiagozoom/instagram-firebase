@@ -7,19 +7,16 @@
 //
 
 import Foundation
-import Firebase
 
-class User: Encodable{
+struct User: Encodable{
     var name: String?
     var profilePictureURL: URL?
     var uid: String?
     
-    init?(snapshot: DataSnapshot) {
-        guard !snapshot.key.isEmpty else{return nil}
-        let uid = snapshot.key
-        guard let snapshot = snapshot.value as? [String: Any] else{return nil}
-        guard let username = snapshot["username"] as? String else{return nil}
-        guard let userProfilePicture = snapshot["userProfilePicture"] as? String else{return nil}
+    init?(dictionary: Dictionary<String,Any>) {
+        guard let uid = dictionary["key"] as? String else{return nil}
+        guard let username = dictionary["username"] as? String else{return nil}
+        guard let userProfilePicture = dictionary["userProfilePicture"] as? String else{return nil}
         
         self.name = username
         self.profilePictureURL = URL(string: userProfilePicture)

@@ -7,9 +7,9 @@
 //
 
 import Foundation
-import Firebase
+import UIKit
 
-class Post: NSObject,Encodable{
+struct Post: Encodable{
     var caption: String?
     var url: URL?
     var creationDate: TimeInterval
@@ -18,21 +18,13 @@ class Post: NSObject,Encodable{
             return Date(timeIntervalSince1970: creationDate)
         }
     }
+    
     var uid: String?
     var imageHeight: CGFloat
     var imageWidth: CGFloat
     var user: User?
     
-    init?(snapshot: DataSnapshot) {
-        guard !snapshot.key.isEmpty else{return nil}
-        self.uid = snapshot.key
-        guard let snapshot = snapshot.value as? [String: Any] else{return nil}
-        guard let caption = snapshot["caption"] as? String else{return nil}
-        guard let url = snapshot["url"] as? String else{return nil}
-        guard let creationDate = snapshot["creationDate"] as? Double else{return nil}
-        guard let imageHeight = snapshot["imageHeight"] as? CGFloat else{return nil}
-        guard let imageWidth = snapshot["imageWidth"] as? CGFloat else{return nil}
-        
+    init(caption: String, url: String, creationDate: Double, imageHeight: CGFloat, imageWidth: CGFloat, user: User? = nil){
         self.caption = caption
         self.url = URL(string: url)
         self.creationDate = creationDate
@@ -40,7 +32,15 @@ class Post: NSObject,Encodable{
         self.imageWidth = imageWidth
     }
     
-    init(caption: String, url: String, creationDate: Double, imageHeight: CGFloat, imageWidth: CGFloat) {
+    init?(dictionary: Dictionary<String,Any>) {
+        guard let uid = dictionary["key"] as? String else{return nil}
+        guard let caption = dictionary["caption"] as? String else{return nil}
+        guard let url = dictionary["url"] as? String else{return nil}
+        guard let creationDate = dictionary["creationDate"] as? Double else{return nil}
+        guard let imageHeight = dictionary["imageHeight"] as? CGFloat else{return nil}
+        guard let imageWidth = dictionary["imageWidth"] as? CGFloat else{return nil}
+        
+        self.uid = uid
         self.caption = caption
         self.url = URL(string: url)
         self.creationDate = creationDate

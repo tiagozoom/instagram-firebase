@@ -68,8 +68,8 @@ class UserSearchController: UICollectionViewController,UICollectionViewDelegateF
     fileprivate func fetchUsers(){
         Database.database().reference().child("users").observeSingleEvent(of: .value) { (snapshot) in
             snapshot.children.forEach({ (value) in
-                if let userSnapshot = value as? DataSnapshot{
-                    if let user = User(snapshot: userSnapshot),user.uid != Auth.auth().currentUser?.uid{
+                if let userSnapshot = value as? DataSnapshot, let userDictionary = userSnapshot.toDictionary(){
+                    if let user = User(dictionary: userDictionary),user.uid != Auth.auth().currentUser?.uid{
                         self.users.append(user)
                     }
                 }
