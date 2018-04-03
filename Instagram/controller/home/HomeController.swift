@@ -29,7 +29,6 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     fileprivate func fetchPosts(completion: ((_ posts: [Post]) -> Void)?){
         guard let userID = Auth.auth().currentUser?.uid else {return}
         FollowRepository.fetchFollows(with: userID) { (uid) in
-            self.posts.removeAll()
             UserRepository.fetchUser(with: uid, completion: { (user) in
                 PostRepository.fetchPostsByValue(with: user, completion: completion)
             })
@@ -43,13 +42,15 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.refresh = UIRefreshControl()
         self.refresh.addTarget(self, action: #selector(self.refreshPosts), for: .valueChanged)
-
         self.collectionView?.refreshControl = self.refresh
+        
         self.collectionView?.backgroundColor = .white
         self.collectionView?.numberOfItems(inSection: 0)
-        collectionView?.register(PostCell.self, forCellWithReuseIdentifier: PostCell.ID)
+        self.collectionView?.register(PostCell.self, forCellWithReuseIdentifier: PostCell.ID)
+        
         fetchPosts(completion: loadPosts)
         setupNavigationItems()
     }
