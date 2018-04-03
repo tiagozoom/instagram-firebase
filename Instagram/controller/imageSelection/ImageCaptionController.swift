@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Firebase
 
 class ImageCaptionController: UIViewController {
     
@@ -109,7 +108,7 @@ class ImageCaptionController: UIViewController {
     
     fileprivate func uploadImage(_ image: UIImage, imageCaption: String? , completion: (() -> Void)?) throws{
         guard let uploadData = UIImageJPEGRepresentation(selectedImage, 0.5) else{throw ImageUpoadException.imageNotFound}
-        guard let userUID = Auth.auth().currentUser?.uid else { throw ImageUpoadException.userNotLoggedIn }
+        guard let userUID = UserRepository.getLoggedUser()?.uid else { throw ImageUpoadException.userNotLoggedIn }
         guard let imageCaption = imageCaption else {throw ImageUpoadException.captionNotFound}
         
         if imageCaption.count <= 0{
