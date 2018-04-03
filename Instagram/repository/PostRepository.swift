@@ -27,7 +27,7 @@ class PostRepository: RepositoryDelegate{
         return Storage.storage().reference().child("posts")
     }
     
-    static func fetchPostsOrdered(byChild child: String, with userId: String, completion: ((Post) -> Void)?){
+    static func fetchAllOrdered(byChild child: String, with userId: String, completion: ((Post) -> Void)?){
         self.databaseRef().child(userId).queryOrdered(byChild: child).observe(.childAdded) { (snapshot) in
             if let postDictionary = snapshot.toDictionary(){
                 if let post = Post(dictionary: postDictionary){
@@ -39,7 +39,7 @@ class PostRepository: RepositoryDelegate{
         }
     }
     
-    static func fetchPostsByValue(with user: User, completion: (([Post]) -> Void)?){
+    static func fetchAllByValue(with user: User, completion: (([Post]) -> Void)?){
         self.databaseRef().child(user.uid!).observeSingleEvent(of: .value, with: { (snapshot) in
             var posts = [Post]()
             snapshot.children.forEach({ (value) in
@@ -57,7 +57,7 @@ class PostRepository: RepositoryDelegate{
         })
     }
     
-    static func fetchPosts(with userId: String, completion: ((Post) -> Void)?){
+    static func fetchAll(with userId: String, completion: ((Post) -> Void)?){
         self.databaseRef().child(userId).observe(.childAdded) { (snapshot) in
             if let postDictionary = snapshot.toDictionary(){
                 if let post = Post(dictionary: postDictionary){
@@ -69,7 +69,7 @@ class PostRepository: RepositoryDelegate{
         }
     }
     
-    static func observePostDeletion(with userId: String, posts: [Post], completion: ((Int) -> Void)?){
+    static func observeDeletion(with userId: String, posts: [Post], completion: ((Int) -> Void)?){
         self.databaseRef().child(userId).observe(.childRemoved) { (snapshot) in
             if let postDictionary = snapshot.toDictionary(){
                 if let post = Post(dictionary: postDictionary){
@@ -83,7 +83,7 @@ class PostRepository: RepositoryDelegate{
         }
     }
     
-    static func uploadPostImage(filename: String, uploadData: Data, success: @escaping ((String?) -> Void), error: @escaping ((Error) -> Void)){
+    static func uploadImage(filename: String, uploadData: Data, success: @escaping ((String?) -> Void), error: @escaping ((Error) -> Void)){
         self.storageRef().child(filename).putData(uploadData, metadata: nil) { (metadata, err) in
             if let err = err{
                error(err)

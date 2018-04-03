@@ -18,7 +18,7 @@ class CommentRepository: RepositoryDelegate{
         return Storage.storage().reference().child("comments")
     }
 
-    static func fetchComments(with postId: String, completion: ((Comment) -> Void)?){
+    static func fetchAll(with postId: String, completion: ((Comment) -> Void)?){
         self.databaseRef().child(postId).observe(.childAdded) { (snapshot) in
             if let commentDictionary = snapshot.toDictionary(){
                 if let comment = Comment(dictionary: commentDictionary), let completion = completion{
