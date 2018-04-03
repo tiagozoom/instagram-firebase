@@ -8,7 +8,6 @@
 
 import UIKit
 import Photos
-import Firebase
 
 class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout, CommentButtonDelegate{
 
@@ -27,10 +26,10 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }()
     
     fileprivate func fetchPosts(completion: ((_ posts: [Post]) -> Void)?){
-        guard let userID = Auth.auth().currentUser?.uid else {return}
-        FollowRepository.fetchFollows(with: userID) { (uid) in
-            UserRepository.fetchUser(with: uid, completion: { (user) in
-                PostRepository.fetchPostsByValue(with: user, completion: completion)
+        guard let userID = UserRepository.getLoggedUser()?.uid else {return}
+        FollowRepository.fetchAll(with: userID) { (uid) in
+            UserRepository.fetch(with: uid, completion: { (user) in
+                PostRepository.fetchAllByValue(with: user, completion: completion)
             })
         }
     }

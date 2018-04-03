@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Firebase
 
 class UserSearchController: UICollectionViewController,UICollectionViewDelegateFlowLayout,UISearchBarDelegate {
     
@@ -66,19 +65,17 @@ class UserSearchController: UICollectionViewController,UICollectionViewDelegateF
     }
     
     fileprivate func fetchUsers(){
-        Database.database().reference().child("users").observeSingleEvent(of: .value) { (snapshot) in
-            snapshot.children.forEach({ (value) in
-                if let userSnapshot = value as? DataSnapshot, let userDictionary = userSnapshot.toDictionary(){
-                    if let user = User(dictionary: userDictionary),user.uid != Auth.auth().currentUser?.uid{
-                        self.users.append(user)
-                    }
-                }
-            })
+        UserRepository.fetchAll(completion: self.loadUsers)
+    }
+    
+    fileprivate func loadUsers(_ users: [User]){
+        DispatchQueue.main.async {
+            self.users = users
             self.filteredUsers = self.users
             self.collectionView?.reloadData()
         }
     }
-    
+
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         self.filteredUsers = filterUsers(users: users, searchText: searchText)
         collectionView?.reloadData()

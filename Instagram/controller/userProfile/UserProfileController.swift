@@ -49,17 +49,17 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     
     fileprivate func observePostsAddition(){
         guard let userUID = user?.uid else{ return}
-        PostRepository.fetchPostsOrdered(byChild: "creationDate", with: userUID , completion: self.loadImage)
+        PostRepository.fetchAllOrdered(byChild: "creationDate", with: userUID , completion: self.loadImage)
     }
     
     fileprivate func observePostsDeletion(){
         guard let userUID = user?.uid else{ return}
-        PostRepository.observePostDeletion(with: userUID, posts: self.posts, completion: self.removeImage)
+        PostRepository.observeDeletion(with: userUID, posts: self.posts, completion: self.removeImage)
     }
     
     fileprivate func fetchUser() throws{
         guard let userUID = self.userUID ?? Auth.auth().currentUser?.uid else{throw FetchUserError.notLoggedIn}
-        UserRepository.fetchUser(with: userUID, completion: self.loadUser)
+        UserRepository.fetch(with: userUID, completion: self.loadUser)
     }
     
     fileprivate func loadUser(user: User){
@@ -171,16 +171,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     func followWasHit() {
         guard let userToBeFollowed = user?.uid else{return}
         guard let currentUserId = Auth.auth().currentUser?.uid else {return}
-        
-        let values = [userToBeFollowed:1]
-        
-        Database.database().reference().child("following").child(currentUserId).updateChildValues(values) { (error, reference) in
-            if let error = error{
-                print(error.localizedDescription)
-                return
-            }
-            self.collectionView?.reloadData()
-        }
+        FollowRepository.update(with: currentUserId, userToBeFollowed: userToBeFollowed, success: self.successUpdatingFollows, error: self.errorUpdatingFollows)
     }
     
     func unfollowWashit() {
@@ -192,15 +183,19 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         })
     }
     
+    fileprivate func successUpdatingFollows(){
+        DispatchQueue.main.async {
+            self.collectionView?.reloadData()
+        }
+    }
+    
+    fileprivate func errorUpdatingFollows(error: Error){
+       print(error.localizedDescription)
+    }
+    
     func userIsFollowing(completion: @escaping ((_ isFollowing: Bool) -> Void)){
         guard let userToBeTested = user?.uid else{return}
-        guard let currentUserId = Auth.auth().currentUser?.uid else {return}
-        Database.database().reference().child("following").child(currentUserId).child(userToBeTested).observeSingleEvent(of: .value) { (snapshot) in
-            if let followId = snapshot.value as? Int, followId == 1{
-                completion(true)
-            }else{
-                completion(false)
-            }
-        }
+        guard let currentUserId = UserRepository.getLoggedUser()?.uid else {return}
+        FollowRepository.fetch(with: currentUserId, userToBeTested: userToBeTested, completion: completion)
     }
 }

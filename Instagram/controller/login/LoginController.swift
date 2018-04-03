@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Firebase
 
 class LoginController: UIViewController, LoginControllerProtocol {
     
@@ -57,20 +56,13 @@ class LoginController: UIViewController, LoginControllerProtocol {
         if password.count < 6 {
             throw LoginError.invalidPassword
         }
-        
-        Auth.auth().signIn(withEmail: email, password: password) { [weak self] (user, error) in
-            
-            self?.setLoginButtonState(as: true)
-            
-            if let error = error{
-                Alert.showBasic("Login Error", message: error.localizedDescription, viewController: self!, handler: nil)
-                return
-            }
-            
-            if let completion = completion{
-                completion()
-            }
-        }
+    
+        UserRepository.login(with: email, password: password, success: completion, error: errorLogin)
+    }
+
+    fileprivate func errorLogin(error: Error){
+        self.setLoginButtonState(as: true)
+        Alert.showBasic("Login Error", message: error.localizedDescription, viewController: self, handler: nil)
     }
     
     private func anyEmptyTextField(_ texts: String...) -> Bool{

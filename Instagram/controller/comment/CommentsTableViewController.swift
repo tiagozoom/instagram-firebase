@@ -28,8 +28,8 @@ class CommentsTableViewController: UITableViewController {
     
     fileprivate func fetchComments(post: Post, completion: ((_ comment:Comment) -> Void)?){
         if let postID = post.uid{
-            CommentRepository.fetchComments(with: postID, completion: { (comment) in
-                UserRepository.fetchUser(with: comment.userID!, completion: { (user) in
+            CommentRepository.fetchAll(with: postID, completion: { (comment) in
+                UserRepository.fetch(with: comment.userID!, completion: { (user) in
                     var fetchedComment = comment
                     fetchedComment.user = user
                     if let completion = completion{
