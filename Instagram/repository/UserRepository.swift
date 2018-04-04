@@ -83,7 +83,8 @@ class UserRepository: RepositoryDelegate{
     }
     
     static func update(user: User, success: (() -> Void)?, error: @escaping ((Error) -> Void)){
-        self.databaseRef().updateChildValues(user.dictionary!, withCompletionBlock: { (err, databaseReference) in
+        let userDictionary = [user.uid!:user.dictionary!]
+        self.databaseRef().updateChildValues(userDictionary, withCompletionBlock: { (err, databaseReference) in
             if let err = err{
                 error(err)
                 return

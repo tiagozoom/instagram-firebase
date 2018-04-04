@@ -10,27 +10,27 @@ import Foundation
 
 struct User: Encodable{
     var name: String?
-    var profilePictureURL: URL?
-    var profilePicture: String?{
+    var profilePicture: String?
+    var uid: String?
+    var profilePictureURL: URL?{
         get{
-            return profilePictureURL?.absoluteString
+            return URL(string: profilePicture!)
         }
     }
-    var uid: String?
     
     init?(dictionary: Dictionary<String,Any>) {
-        guard let uid = dictionary["key"] as? String else{return nil}
-        guard let username = dictionary["username"] as? String else{return nil}
-        guard let userProfilePicture = dictionary["userProfilePicture"] as? String else{return nil}
+        guard let uid = dictionary["uid"] as? String else{return nil}
+        guard let username = dictionary["name"] as? String else{return nil}
+        guard let userProfilePicture = dictionary["profilePicture"] as? String else{return nil}
         
         self.name = username
-        self.profilePictureURL = URL(string: userProfilePicture)
+        self.profilePicture = userProfilePicture
         self.uid = uid
     }
     
-    init(name: String, profilePictureURL: URL, uid: String){
+    init(name: String, profilePicture: String, uid: String){
         self.name = name
-        self.profilePictureURL = profilePictureURL
+        self.profilePicture = profilePicture
         self.uid = uid
     }
 }
