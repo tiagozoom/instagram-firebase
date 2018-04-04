@@ -178,46 +178,40 @@ class SignupController: UIViewController, UIImagePickerControllerDelegate, UINav
             throw SignUpError.invalidPassword
         }
         
-        Auth.auth().createUser(withEmail: emailTextField.text!, password: passwordTextField.text!) { [weak self] (user, error) in
-            if let error = error{
-                Alert.showBasic("Login Error", message: error.localizedDescription, viewController: self!, handler: nil)
-                self?.signUpButton.setAsEnabled(true)
-            }else{
+        if let email = emailTextField.text, let password = passwordTextField.text{
+            
+            UserRepository.createUser(withEmail: email, password: password, success: { (uid) in
                 
-                guard let image = self?.getProfileImage() else{ return }
+                guard let image = self.getProfileImage() else{ return }
                 guard let uploadData = UIImagePNGRepresentation(image) else { return }
-                
                 let filename = NSUUID().uuidString
                 
-                Storage.storage().reference().child("profile_images").child(filename).putData(uploadData, metadata: nil, completion: { (storageMetadata, error) in
-                    if let error = error{
-                        Alert.showBasic("Firabase storage error", message: error.localizedDescription, viewController: self!, handler: nil)
-                        self?.signUpButton.setAsEnabled(true)
-                        return
-                    }
+                ProfileImagesRepository.uploadImage(with: filename, uploadData: uploadData, success: { (absoluteString) in
                     
-                    guard let uid = user?.uid else {return}
-                    let userInfoDictionary = ["username":username,"userProfilePicture": storageMetadata?.downloadURL()?.absoluteString]
-                    let values = [uid:userInfoDictionary]
+                    guard let uid = uid else {return}
+                    let user = User(name: username, profilePicture: absoluteString!, uid: uid)
                     
-                    Database.database().reference().child("users").updateChildValues(values, withCompletionBlock: { (error, databaseReference) in
-                        if let error = error{
-                            Alert.showBasic("Firabase storage error", message: error.localizedDescription, viewController: self!, handler: nil)
-                            return
-                        }
+                    UserRepository.update(user: user, success: {
                         
-                        let values = [uid:1]
+                        FollowRepository.update(with: user.uid!, userToBeFollowed: user.uid!,success: self.signupSuccess, error: self.signupError)
                         
-                        Database.database().reference().child("following").child(uid).updateChildValues(values) { (error, reference) in
-                            self?.present(MainTabController(), animated: true, completion: nil)
-                        }
-                        
-                    })
-                })
-            }
+                    }, error: self.signupError)
+                    
+                }, error: self.signupError)
+                
+            }, error: self.signupError)
         }
     }
     
+    fileprivate func signupSuccess(){
+        self.present(MainTabController(), animated: true, completion: nil)
+    }
+    
+    fileprivate func signupError(error: Error){
+        Alert.showBasic("Login Error", message: error.localizedDescription, viewController: self, handler: nil)
+        self.signUpButton.setAsEnabled(true)
+    }
+
     private func getProfileImage() -> UIImage?{
         return addPhotoButton.currentImage
     }
