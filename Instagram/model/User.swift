@@ -11,6 +11,11 @@ import Foundation
 struct User: Encodable{
     var name: String?
     var profilePictureURL: URL?
+    var profilePicture: String?{
+        get{
+            return profilePictureURL?.absoluteString
+        }
+    }
     var uid: String?
     
     init?(dictionary: Dictionary<String,Any>) {
@@ -20,6 +25,12 @@ struct User: Encodable{
         
         self.name = username
         self.profilePictureURL = URL(string: userProfilePicture)
+        self.uid = uid
+    }
+    
+    init(name: String, profilePictureURL: URL, uid: String){
+        self.name = name
+        self.profilePictureURL = profilePictureURL
         self.uid = uid
     }
 }

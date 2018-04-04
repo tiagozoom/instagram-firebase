@@ -23,6 +23,7 @@
 		483DA7711FB1133900702266 /* UserProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483DA7701FB1133900702266 /* UserProfileController.swift */; };
 		48472C8A2063229F009B9801 /* CommentsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48472C892063229F009B9801 /* CommentsViewCell.swift */; };
 		48472C8C206333AA009B9801 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48472C8B206333AA009B9801 /* Comment.swift */; };
+		484FFF1A2074617F0063F4B3 /* ProfileImagesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484FFF192074617F0063F4B3 /* ProfileImagesRepository.swift */; };
 		4850B7A120717C0A009061D7 /* CommentRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4850B7A020717C0A009061D7 /* CommentRepository.swift */; };
 		486298371FB7AEB4005EFF69 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486298361FB7AEB4005EFF69 /* LoginView.swift */; };
 		4862983A1FB7B042005EFF69 /* LoginProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486298391FB7B042005EFF69 /* LoginProtocol.swift */; };
@@ -98,6 +99,7 @@
 		483DA7701FB1133900702266 /* UserProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileController.swift; sourceTree = "<group>"; };
 		48472C892063229F009B9801 /* CommentsViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewCell.swift; sourceTree = "<group>"; };
 		48472C8B206333AA009B9801 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
+		484FFF192074617F0063F4B3 /* ProfileImagesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImagesRepository.swift; sourceTree = "<group>"; };
 		4850B7A020717C0A009061D7 /* CommentRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRepository.swift; sourceTree = "<group>"; };
 		486298361FB7AEB4005EFF69 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		486298391FB7B042005EFF69 /* LoginProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginProtocol.swift; sourceTree = "<group>"; };
@@ -345,6 +347,7 @@
 				48CBAD85206EF759006319BE /* ResponseDelegate.swift */,
 				48CBAD87206EF794006319BE /* Response.swift */,
 				4850B7A020717C0A009061D7 /* CommentRepository.swift */,
+				484FFF192074617F0063F4B3 /* ProfileImagesRepository.swift */,
 			);
 			name = repository;
 			path = Instagram/repository;
@@ -797,6 +800,7 @@
 				48F9B4B61FE9C7BB00E2CD8D /* PostCell.swift in Sources */,
 				48275FB01FD619B300F5CC41 /* UISeparateNavigationController.swift in Sources */,
 				48CBAD84206EF319006319BE /* PostRepository.swift in Sources */,
+				484FFF1A2074617F0063F4B3 /* ProfileImagesRepository.swift in Sources */,
 				8C3699AC1FB20D59005CAA2D /* User.swift in Sources */,
 				8C56710A2049D1C100BE7120 /* PostCellCollectionViewCell.swift in Sources */,
 				483DA7711FB1133900702266 /* UserProfileController.swift in Sources */,

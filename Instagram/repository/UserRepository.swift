@@ -68,4 +68,30 @@ class UserRepository: RepositoryDelegate{
     static func getLoggedUser() -> FirebaseAuth.User?{
         return self.authRef().currentUser
     }
+    
+    static func createUser(withEmail email: String, password: String, success: ((String?) -> Void)?, error: @escaping ((Error) -> Void)){
+        self.authRef().createUser(withEmail: email , password: password) { (user, err) in
+            if let err = err{
+                error(err)
+                return
+            }
+            
+            if let success = success{
+                success(user?.uid)
+            }
+        }
+    }
+    
+    static func update(user: User, success: (() -> Void)?, error: @escaping ((Error) -> Void)){
+        self.databaseRef().updateChildValues(user.dictionary!, withCompletionBlock: { (err, databaseReference) in
+            if let err = err{
+                error(err)
+                return
+            }
+            
+            if let success = success{
+                success()
+            }
+        })
+    }
 }
