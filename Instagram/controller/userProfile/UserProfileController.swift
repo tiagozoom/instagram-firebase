@@ -7,14 +7,13 @@
 //
 
 import UIKit
-import Firebase
 
 class UserProfileController: UICollectionViewController, UICollectionViewDelegateFlowLayout,UserProfileEditButtonDelegate {
 
     var hideFollowButton: Bool = true
     var posts = [Post]()
     var imageCache = [String:UIImage]()
-    var userProfilePictureURL: String?
+
     var user: User?{
         didSet{
             navigationItem.title = user?.name
@@ -58,7 +57,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     }
     
     fileprivate func fetchUser() throws{
-        guard let userUID = self.userUID ?? Auth.auth().currentUser?.uid else{throw FetchUserError.notLoggedIn}
+        guard let userUID = self.userUID ?? UserRepository.authRef().currentUser?.uid else{throw FetchUserError.notLoggedIn}
         UserRepository.fetch(with: userUID, completion: self.loadUser)
     }
     
@@ -101,7 +100,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alertController.addAction(UIAlertAction(title: NSLocalizedString("logout", comment: ""), style: .destructive, handler: { [weak self] (_) in
             do{
-                try Auth.auth().signOut()
+                try UserRepository.authRef().signOut()
                 self?.present(LoginNavigationController(), animated: true, completion: nil)
             }catch let signOutError as NSError{
                 Alert.showBasic("Sign Out error", message: signOutError.localizedDescription, viewController: self!, handler: nil)
@@ -149,7 +148,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return posts.count
     }
-    
+   
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         //Horizontal and vertical spacing between cells is 1 pixel each
         let size = (self.view.frame.width - 2) / 3
@@ -170,17 +169,14 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     
     func followWasHit() {
         guard let userToBeFollowed = user?.uid else{return}
-        guard let currentUserId = Auth.auth().currentUser?.uid else {return}
+        guard let currentUserId = UserRepository.authRef().currentUser?.uid else {return}
         FollowRepository.update(with: currentUserId, userToBeFollowed: userToBeFollowed, success: self.successUpdatingFollows, error: self.errorUpdatingFollows)
     }
     
     func unfollowWashit() {
         guard let userToBeUnfollowed = user?.uid else{return}
-        guard let currentUserId = Auth.auth().currentUser?.uid else {return}
-
-        Database.database().reference().child("following").child(currentUserId).child(userToBeUnfollowed).removeValue(completionBlock: { (error, reference) in
-            self.collectionView?.reloadData()
-        })
+        guard let currentUserId = UserRepository.authRef().currentUser?.uid else {return}
+        FollowRepository.remove(with: currentUserId, userToBeUnfollowed: userToBeUnfollowed, success: self.successUpdatingFollows, error: self.errorUpdatingFollows)
     }
     
     fileprivate func successUpdatingFollows(){
