@@ -10,6 +10,7 @@ import Foundation
 import Firebase
 
 class UserRepository: RepositoryDelegate{
+    static let dispatchGroup = DispatchGroup()
     
     static func authRef() -> Auth{
         return Auth.auth()
@@ -28,14 +29,43 @@ class UserRepository: RepositoryDelegate{
             var users = [User]()
             snapshot.children.forEach({ (value) in
                 if let userSnapshot = value as? DataSnapshot, let userDictionary = userSnapshot.toDictionary(){
-                    if let user = User(dictionary: userDictionary),user.uid != Auth.auth().currentUser?.uid{
-                        users.append(user)
+                    if var user = User(dictionary: userDictionary),user.uid != Auth.auth().currentUser?.uid{
+                        UserRepository.dispatchGroup.enter()
+                        PostRepository.fetchAllByValue(with: user, completion: { (posts) in
+                            user.posts = posts
+                            users.append(user)
+                            UserRepository.dispatchGroup.leave()
+                        })
                     }
                 }
             })
-            
-            if let completion = completion{
-                completion(users)
+            UserRepository.dispatchGroup.notify(queue: DispatchQueue.main) {
+                if let completion = completion{
+                    completion(users)
+                }
+            }
+        })
+    }
+    
+    static func fetchAllWith(with userIds: [String], completion: (([User]) -> Void)?){
+        self.databaseRef().observeSingleEvent(of: .value, with: { (snapshot) in
+            var users = [User]()
+            snapshot.children.forEach({ (value) in
+                if let userSnapshot = value as? DataSnapshot, let userDictionary = userSnapshot.toDictionary(){
+                    if var user = User(dictionary: userDictionary),user.uid != Auth.auth().currentUser?.uid, (userIds.firstIndex(of: user.uid!) != nil){
+                        UserRepository.dispatchGroup.enter()
+                        PostRepository.fetchAllByValue(with: user, completion: { (posts) in
+                            user.posts = posts
+                            users.append(user)
+                            UserRepository.dispatchGroup.leave()
+                        })
+                    }
+                }
+            })
+            UserRepository.dispatchGroup.notify(queue: DispatchQueue.main) {
+                if let completion = completion{
+                    completion(users)
+                }
             }
         })
     }

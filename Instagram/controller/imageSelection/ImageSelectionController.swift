@@ -45,7 +45,7 @@ class ImageSelectionController: UIViewController,ImageSelectorControllerProtocol
             fetchUserPhotos(withImageSize: imageSizeForCell,options:getFetchOptions(), completion: loadImages)
         }else if status == .denied{
             Alert.showBasic("Permission denied", message: "Sorry but we need your permission to access the photo library", viewController: self,handler: { (action) in
-                UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler: nil)
+                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
             })
         }else if status == .notDetermined{
             requestPhotoLibraryAuthorization(completion: testPhotoLibraryPermission)
@@ -89,6 +89,7 @@ class ImageSelectionController: UIViewController,ImageSelectorControllerProtocol
     
     @objc func tapGestureRecognizerHandler(){
         self.imageSelectionView?.pullHeaderDown()
+        self.imageSelectionView?.collectionView.setContentOffset(CGPoint(x: 0,y: 0), animated: true)
     }
     
     @objc func panGestureRecognizerHandler(_ panGestureRecognizer: UIPanGestureRecognizer){
@@ -185,4 +186,9 @@ class ImageSelectionController: UIViewController,ImageSelectorControllerProtocol
     fileprivate func updateHeaderImage(_ image: UIImage){
         self.imageSelectionView?.updateHeaderImage(image: image)
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }

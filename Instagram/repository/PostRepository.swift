@@ -73,7 +73,7 @@ class PostRepository: RepositoryDelegate{
         self.databaseRef().child(userId).observe(.childRemoved) { (snapshot) in
             if let postDictionary = snapshot.toDictionary(){
                 if let post = Post(dictionary: postDictionary){
-                    if let index = posts.index(where: {$0.uid == post.uid}) {
+                    if let index = posts.firstIndex(where: {$0.uid == post.uid}) {
                         if let completion = completion{
                             completion(index)
                         }

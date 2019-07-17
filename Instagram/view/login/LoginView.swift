@@ -67,7 +67,7 @@ class LoginView: UIView, LoginViewProtocol{
     
     let emailTextField: UITextField = {
         let textField = UITextField()
-        textField.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [NSAttributedStringKey.foregroundColor : UIColor(white: 0, alpha: 0.2)])
+        textField.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [NSAttributedString.Key.foregroundColor : UIColor(white: 0, alpha: 0.2)])
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.borderStyle = .roundedRect
         textField.backgroundColor = UIColor(white: 0, alpha: 0.03)
@@ -80,7 +80,7 @@ class LoginView: UIView, LoginViewProtocol{
     
     let passwordTextField: UITextField = {
         let textField = UITextField()
-        textField.attributedPlaceholder = NSAttributedString(string: "Password", attributes: [NSAttributedStringKey.foregroundColor : UIColor(white: 0, alpha: 0.2)])
+        textField.attributedPlaceholder = NSAttributedString(string: "Password", attributes: [NSAttributedString.Key.foregroundColor : UIColor(white: 0, alpha: 0.2)])
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.borderStyle = .roundedRect
         textField.backgroundColor = UIColor(white: 0, alpha: 0.03)
@@ -102,13 +102,10 @@ class LoginView: UIView, LoginViewProtocol{
     
     let signUpButton: UIButton = {
         let button = UIButton(type: .system)
-        
         let normalText = "Don't have an account? "
         let buttonText = NSMutableAttributedString(string:normalText, attributes: [.foregroundColor: UIColor.lightGray])
-        
         let boldText = "Sign Up"
         let attributedString = NSMutableAttributedString(string: boldText, attributes: [.font : UIFont.boldSystemFont(ofSize: 15), .foregroundColor: UIColor.rgb(red: 17, green: 154, blue: 237)])
-        
         buttonText.append(attributedString)
         button.setAttributedTitle(buttonText, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false

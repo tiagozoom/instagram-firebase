@@ -27,7 +27,7 @@ class ImageCaptionController: UIViewController {
     }
     
     let loadingIcon: UIActivityIndicatorView = {
-        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+        let activityIndicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         return activityIndicator
     }()
@@ -107,7 +107,7 @@ class ImageCaptionController: UIViewController {
     }
     
     fileprivate func uploadImage(_ image: UIImage, imageCaption: String? , completion: (() -> Void)?) throws{
-        guard let uploadData = UIImageJPEGRepresentation(selectedImage, 0.5) else{throw ImageUpoadException.imageNotFound}
+        guard let uploadData = selectedImage.jpegData(compressionQuality: 0.5) else{throw ImageUpoadException.imageNotFound}
         guard let userUID = UserRepository.getLoggedUser()?.uid else { throw ImageUpoadException.userNotLoggedIn }
         guard let imageCaption = imageCaption else {throw ImageUpoadException.captionNotFound}
         

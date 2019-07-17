@@ -27,6 +27,8 @@
 		4850B7A120717C0A009061D7 /* CommentRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4850B7A020717C0A009061D7 /* CommentRepository.swift */; };
 		486298371FB7AEB4005EFF69 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486298361FB7AEB4005EFF69 /* LoginView.swift */; };
 		4862983A1FB7B042005EFF69 /* LoginProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486298391FB7B042005EFF69 /* LoginProtocol.swift */; };
+		488B86AD22D6D29B0023EC76 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488B86AC22D6D29B0023EC76 /* SignUpView.swift */; };
+		488B86AF22D6D3090023EC76 /* SignUpProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488B86AE22D6D3090023EC76 /* SignUpProtocol.swift */; };
 		488C439B1FAB4C3E00B667FC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 488C439A1FAB4C3D00B667FC /* GoogleService-Info.plist */; };
 		48920B251FA299D40097986C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48920B241FA299D40097986C /* AppDelegate.swift */; };
 		48920B271FA299D40097986C /* SignupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48920B261FA299D40097986C /* SignupController.swift */; };
@@ -103,6 +105,8 @@
 		4850B7A020717C0A009061D7 /* CommentRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRepository.swift; sourceTree = "<group>"; };
 		486298361FB7AEB4005EFF69 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		486298391FB7B042005EFF69 /* LoginProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginProtocol.swift; sourceTree = "<group>"; };
+		488B86AC22D6D29B0023EC76 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		488B86AE22D6D3090023EC76 /* SignUpProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpProtocol.swift; sourceTree = "<group>"; };
 		488C439A1FAB4C3D00B667FC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		48920B211FA299D40097986C /* Instagram.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Instagram.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		48920B241FA299D40097986C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -182,6 +186,7 @@
 		482017EF1FABCDF60080B18B /* view */ = {
 			isa = PBXGroup;
 			children = (
+				488B86AB22D6D2790023EC76 /* signUp */,
 				48472C8820632279009B9801 /* comment */,
 				8CCB5148204DC5DF001CD5D1 /* search */,
 				48F9B4B41FE9C7A400E2CD8D /* home */,
@@ -272,8 +277,17 @@
 				486298391FB7B042005EFF69 /* LoginProtocol.swift */,
 				8C0604081FDEA1D80036E507 /* ImageSelectorProtocol.swift */,
 				482340EA1FBA54BC00C2B333 /* MainMenuNavigationProtocol.swift */,
+				488B86AE22D6D3090023EC76 /* SignUpProtocol.swift */,
 			);
 			path = protocol;
+			sourceTree = "<group>";
+		};
+		488B86AB22D6D2790023EC76 /* signUp */ = {
+			isa = PBXGroup;
+			children = (
+				488B86AC22D6D29B0023EC76 /* SignUpView.swift */,
+			);
+			path = signUp;
 			sourceTree = "<group>";
 		};
 		48920B181FA299D40097986C = {
@@ -546,15 +560,18 @@
 				TargetAttributes = {
 					48920B201FA299D40097986C = {
 						CreatedOnToolsVersion = 9.0.1;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 					48920B371FA299D40097986C = {
 						CreatedOnToolsVersion = 9.0.1;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 48920B201FA299D40097986C;
 					};
 					48920B421FA299D40097986C = {
 						CreatedOnToolsVersion = 9.0.1;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 48920B201FA299D40097986C;
 					};
@@ -793,10 +810,12 @@
 				482F4E3C1FB6532600D821F5 /* HomeNavigationController.swift in Sources */,
 				482F4E3A1FB6521900D821F5 /* UserProfileNavigationController.swift in Sources */,
 				482340EB1FBA54BC00C2B333 /* MainMenuNavigationProtocol.swift in Sources */,
+				488B86AD22D6D29B0023EC76 /* SignUpView.swift in Sources */,
 				48F39FB620647F6300A41AEA /* CommentsTableViewController.swift in Sources */,
 				48CBAD81206EF319006319BE /* UserRepository.swift in Sources */,
 				48F9B4AF1FE9C3D100E2CD8D /* ImageSelectionHeader.swift in Sources */,
 				48920B251FA299D40097986C /* AppDelegate.swift in Sources */,
+				488B86AF22D6D3090023EC76 /* SignUpProtocol.swift in Sources */,
 				48F9B4B61FE9C7BB00E2CD8D /* PostCell.swift in Sources */,
 				48275FB01FD619B300F5CC41 /* UISeparateNavigationController.swift in Sources */,
 				48CBAD84206EF319006319BE /* PostRepository.swift in Sources */,
@@ -1000,13 +1019,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = WZA5VVFPHP;
+				DEVELOPMENT_TEAM = Q574737C9B;
 				INFOPLIST_FILE = Instagram/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tgzoom.Instagram;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1017,13 +1036,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = WZA5VVFPHP;
+				DEVELOPMENT_TEAM = Q574737C9B;
 				INFOPLIST_FILE = Instagram/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tgzoom.Instagram;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -1040,7 +1059,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tgzoom.programs.InstagramTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Instagram.app/Instagram";
 			};
@@ -1058,7 +1077,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tgzoom.programs.InstagramTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Instagram.app/Instagram";
 			};
@@ -1075,7 +1094,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tgzoom.programs.InstagramUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Instagram;
 			};
@@ -1092,7 +1111,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tgzoom.programs.InstagramUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Instagram;
 			};

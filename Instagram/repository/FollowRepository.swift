@@ -27,14 +27,18 @@ class FollowRepository: RepositoryDelegate{
             }
         }
     }
-
-    static func fetchAll(with userId: String, completion: ((String) ->Void)?){
+    
+    static func fetchAll(with userId: String, completion: (([String]) ->Void)?){
+        var userIds = [String]()
         self.databaseRef().child(userId).observeSingleEvent(of: .value, with: { (snapshot) in
             snapshot.children.forEach({ (value) in
-                if let usersnapshot = value as? DataSnapshot, let completion = completion{
-                    completion(usersnapshot.key)
+                if let usersnapshot = value as? DataSnapshot{
+                    userIds.append(usersnapshot.key)
                 }
             })
+            if let completion = completion{
+                completion(userIds)
+            }
         })
     }
     
@@ -47,7 +51,7 @@ class FollowRepository: RepositoryDelegate{
             }
             
             if let success = success{
-               success()
+                success()
             }
         }
     }

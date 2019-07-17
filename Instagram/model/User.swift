@@ -12,6 +12,7 @@ struct User: Encodable{
     var name: String?
     var profilePicture: String?
     var uid: String?
+    var posts: [Post]?
     var profilePictureURL: URL?{
         get{
             return URL(string: profilePicture!)

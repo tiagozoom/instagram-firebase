@@ -15,7 +15,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     var refresh: UIRefreshControl!
     
-    let titleView: UIImageView = {
+    let instagramLogoView: UIImageView = {
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = #imageLiteral(resourceName: "Instagram_logo_white").withRenderingMode(.alwaysTemplate)
@@ -27,9 +27,22 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     fileprivate func fetchPosts(completion: ((_ posts: [Post]) -> Void)?){
         guard let userID = UserRepository.getLoggedUser()?.uid else {return}
-        FollowRepository.fetchAll(with: userID) { (uid) in
-            UserRepository.fetch(with: uid, completion: { (user) in
-                PostRepository.fetchAllByValue(with: user, completion: completion)
+        var userPosts = [Post]()
+        let dispatchGroup = DispatchGroup()
+        FollowRepository.fetchAll(with: userID) { (uids) in
+            UserRepository.fetchAllWith(with: uids, completion: { (users) in
+                users.forEach({ (user) in
+                    dispatchGroup.enter()
+                    PostRepository.fetchAllByValue(with: user, completion: { (posts) in
+                        userPosts.append(contentsOf: posts)
+                        dispatchGroup.leave()
+                    })
+                })
+                dispatchGroup.notify(queue: DispatchQueue.main) {
+                    if let completion = completion {
+                        completion(userPosts)
+                    }
+                }
             })
         }
     }
@@ -38,7 +51,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
        self.posts.removeAll()
        self.fetchPosts(completion: loadPosts)
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -75,7 +88,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PostCell.ID, for: indexPath)
-        if let postCell = cell as? PostCell{
+        if let postCell = cell as? PostCell, posts.count > 0{
             postCell.delegate = self
             postCell.post = posts[indexPath.row]
         }
@@ -90,7 +103,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     fileprivate func setupNavigationItems(){
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "camera3").withRenderingMode(.alwaysOriginal), style: .done, target: self, action: nil)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "send2").withRenderingMode(.alwaysOriginal), style: .done, target: self, action: nil)
-        navigationItem.titleView = titleView
+        navigationItem.titleView = instagramLogoView
     }
     
     func commentsButtonWasHit(post: Post?) {

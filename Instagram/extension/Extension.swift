@@ -17,9 +17,9 @@ extension UIColor{
 }
 
 extension UIView{
-    func anchors( top: NSLayoutYAxisAnchor?, right: NSLayoutXAxisAnchor?, bottom: NSLayoutYAxisAnchor?, left: NSLayoutXAxisAnchor?,paddingTop: CGFloat, paddingRight: CGFloat, paddingBottom: CGFloat, paddingLeft: CGFloat, width: CGFloat?, height: CGFloat?){
+func anchors( top: NSLayoutYAxisAnchor?, right: NSLayoutXAxisAnchor?, bottom: NSLayoutYAxisAnchor?, left: NSLayoutXAxisAnchor?,paddingTop: CGFloat?, paddingRight: CGFloat, paddingBottom: CGFloat, paddingLeft: CGFloat, width: CGFloat?, height: CGFloat?){
         
-        if let top = top {
+        if let top = top, let paddingTop = paddingTop{
             self.topAnchor.constraint(equalTo: top, constant: paddingTop).isActive = true
         }
         
@@ -85,7 +85,7 @@ extension UIButton{
         }
     }
     
-    func setRoundImage(_ image: UIImage?, for state: UIControlState ){
+    func setRoundImage(_ image: UIImage?, for state: UIControl.State ){
         self.layer.cornerRadius = self.frame.width / 2
         self.layer.masksToBounds = true
         self.setImage(image, for: state)

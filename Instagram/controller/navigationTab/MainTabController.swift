@@ -28,7 +28,6 @@ class MainTabController: UITabBarController,UITabBarControllerDelegate {
             DispatchQueue.main.async { [weak self] in
                 self?.present(LoginNavigationController(), animated: true, completion: nil)
             }
-            
             return
         }
         

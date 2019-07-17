@@ -188,7 +188,6 @@ class PostCell: UICollectionViewCell{
     @objc func postCommentHandler(){
        self.delegate?.commentsButtonWasHit(post: post)
     }
-    
 
     fileprivate func setupAttributedPostCaption(post: Post){
         guard let user = post.user else {return}

@@ -83,6 +83,7 @@ class UserSearchCellCollectionViewCell: UICollectionViewCell {
     fileprivate func loadUser(){
         if let user = user{
             userName.text = user.name
+            self.numberOfPosts.text = "\(user.posts?.count ?? 0)"
             self.userProfilePicture.pin_updateWithProgress = true
             self.userProfilePicture.pin_setImage(from: user.profilePictureURL)
         }

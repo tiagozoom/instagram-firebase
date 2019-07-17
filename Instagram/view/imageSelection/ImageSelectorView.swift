@@ -53,10 +53,10 @@ class ImageSelectionView: UIView, ImageSelectorViewProtocol{
                         imageSelectorTopAnchor?.constant += translation.y
                     }
                 }else{
-                    if collectionViewIsAtTheTop(self.collectionView.contentOffset) {
+                    //if collectionViewIsAtTheTop(self.collectionView.contentOffset) {
                         collectionView(setScrollState: false)
                         imageSelectorTopAnchor?.constant += translation.y
-                    }
+                    //}
                 }
             }
             else{
@@ -66,10 +66,10 @@ class ImageSelectionView: UIView, ImageSelectorViewProtocol{
                         imageSelectorTopAnchor?.constant = min(imageSelectorTopAnchor!.constant + translation.y,0.0)
                     }
                 }else{
-                    if collectionViewIsAtTheTop(self.collectionView.contentOffset) {
+                    //if collectionViewIsAtTheTop(self.collectionView.contentOffset) {
                         collectionView(setScrollState: false)
                         imageSelectorTopAnchor?.constant = min(imageSelectorTopAnchor!.constant + translation.y,0.0)
-                    }
+                    //}
                 }
             }
         }

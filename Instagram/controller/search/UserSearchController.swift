@@ -33,7 +33,7 @@ class UserSearchController: UICollectionViewController,UICollectionViewDelegateF
         self.collectionView?.register(UserSearchCellCollectionViewCell.self, forCellWithReuseIdentifier:UserSearchCellCollectionViewCell.ID)
         setupViews()
         fetchUsers()
-    }
+}
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -71,7 +71,7 @@ class UserSearchController: UICollectionViewController,UICollectionViewDelegateF
     fileprivate func loadUsers(_ users: [User]){
         DispatchQueue.main.async {
             self.users = users
-            self.filteredUsers = self.users
+            self.filteredUsers = self.sortUsers(users: self.users)
             self.collectionView?.reloadData()
         }
     }
@@ -82,7 +82,7 @@ class UserSearchController: UICollectionViewController,UICollectionViewDelegateF
     }
     
     private func filterUsers(users: [User], searchText: String) -> [User]{
-        let filteredUsers: [User]
+        var filteredUsers: [User]
         if searchText.isEmpty{
             filteredUsers = users
         }else{
@@ -90,12 +90,16 @@ class UserSearchController: UICollectionViewController,UICollectionViewDelegateF
                 return user.name!.lowercased().contains(searchText.lowercased())
             }
         }
-        
-        filteredUsers.sort { (user1, user2) -> Bool in
-            return user1.name!.compare(user2.name!) == .orderedDescending
-        }
-        
+        filteredUsers = self.sortUsers(users: users)
         return filteredUsers
+    }
+    
+    private func sortUsers(users: [User]) -> [User]{
+        var users = users
+        users.sort { (prev, next) -> Bool in
+            prev.name!.compare(next.name!) == .orderedAscending
+        }
+        return users
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

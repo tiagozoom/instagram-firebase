@@ -24,7 +24,7 @@ class ImageSelectionCell: UICollectionViewCell {
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
         return imageView
-    }()
+        }()
     
     func updateUI(){
         userImageView.image = photo
